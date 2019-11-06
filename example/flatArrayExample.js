@@ -2,7 +2,20 @@ import React, { Component } from 'react'
 import Dropdown from '../index.js'
 
 const options = [
-  'one', 'two', 'three'
+  {
+    label: 'foo',
+    value: 'foo',
+    meta: {
+      isHuman: false
+    }
+  },
+  {
+    label: 'bar',
+    value: 'bar',
+    meta: {
+      isHuman: true
+    }
+  }
 ]
 
 class FlatArrayExample extends Component {
@@ -15,7 +28,7 @@ class FlatArrayExample extends Component {
   }
 
   _onSelect (option) {
-    console.log('You selected ', option.label)
+    console.log('You selected ', option)
     this.setState({selected: option})
   }
 

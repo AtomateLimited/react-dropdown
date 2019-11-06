@@ -98,7 +98,7 @@ var Dropdown = function (_Component) {
   }, {
     key: 'parseValue',
     value: function parseValue(value, options) {
-      var option = undefined;
+      var option = void 0;
 
       if (typeof value === 'string') {
         for (var i = 0, num = options.length; i < num; i++) {
@@ -119,11 +119,12 @@ var Dropdown = function (_Component) {
     }
   }, {
     key: 'setValue',
-    value: function setValue(value, label) {
+    value: function setValue(value, label, meta) {
       var newState = {
         selected: {
           value: value,
-          label: label
+          label: label,
+          meta: meta
         },
         isOpen: false
       };
@@ -147,8 +148,11 @@ var Dropdown = function (_Component) {
         value = option.label || option;
       }
       var label = option.label || option.value || option;
+      var isSelected = value === this.state.selected.value || value === this.state.selected;
 
-      var classes = (_classes = {}, _defineProperty(_classes, this.props.baseClassName + '-option', true), _defineProperty(_classes, option.className, !!option.className), _defineProperty(_classes, 'is-selected', value === this.state.selected.value || value === this.state.selected), _classes);
+      var meta = option.meta || {};
+
+      var classes = (_classes = {}, _defineProperty(_classes, this.props.baseClassName + '-option', true), _defineProperty(_classes, option.className, !!option.className), _defineProperty(_classes, 'is-selected', isSelected), _classes);
 
       var optionClass = (0, _classnames2.default)(classes);
 
@@ -157,8 +161,10 @@ var Dropdown = function (_Component) {
         {
           key: value,
           className: optionClass,
-          onMouseDown: this.setValue.bind(this, value, label),
-          onClick: this.setValue.bind(this, value, label) },
+          onMouseDown: this.setValue.bind(this, value, label, meta),
+          onClick: this.setValue.bind(this, value, label, meta),
+          role: 'option',
+          'aria-selected': isSelected ? 'true' : 'false' },
         label
       );
     }
@@ -184,7 +190,7 @@ var Dropdown = function (_Component) {
 
           return _react2.default.createElement(
             'div',
-            { className: baseClassName + '-group', key: option.name },
+            { className: baseClassName + '-group', key: option.name, role: 'listbox', tabIndex: '-1' },
             groupTitle,
             _options
           );
@@ -247,7 +253,7 @@ var Dropdown = function (_Component) {
       );
       var menu = this.state.isOpen ? _react2.default.createElement(
         'div',
-        { className: menuClass },
+        { className: menuClass, 'aria-expanded': 'true' },
         this.buildMenu()
       ) : null;
 
@@ -256,7 +262,7 @@ var Dropdown = function (_Component) {
         { className: dropdownClass },
         _react2.default.createElement(
           'div',
-          { className: controlClass, onMouseDown: this.handleMouseDown.bind(this), onTouchEnd: this.handleMouseDown.bind(this) },
+          { className: controlClass, onMouseDown: this.handleMouseDown.bind(this), onTouchEnd: this.handleMouseDown.bind(this), 'aria-haspopup': 'listbox' },
           value,
           _react2.default.createElement(
             'div',
