@@ -78,11 +78,13 @@ class Dropdown extends Component {
     return option || value
   }
 
-  setValue (value, label) {
+  setValue (value, label, meta) {
     let newState = {
       selected: {
         value,
-        label},
+        label,
+        meta
+      },
       isOpen: false
     }
     this.fireChangeEvent(newState)
@@ -103,6 +105,8 @@ class Dropdown extends Component {
     let label = option.label || option.value || option
     let isSelected = value === this.state.selected.value || value === this.state.selected
 
+    let meta = option.meta || {};
+
     const classes = {
       [`${this.props.baseClassName}-option`]: true,
       [option.className]: !!option.className,
@@ -115,8 +119,8 @@ class Dropdown extends Component {
       <div
         key={value}
         className={optionClass}
-        onMouseDown={this.setValue.bind(this, value, label)}
-        onClick={this.setValue.bind(this, value, label)}
+        onMouseDown={this.setValue.bind(this, value, label, meta)}
+        onClick={this.setValue.bind(this, value, label, meta)}
         role='option'
         aria-selected={isSelected ? 'true' : 'false'}>
         {label}
